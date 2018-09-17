@@ -60,8 +60,10 @@ for line in asemb:
     program.append(line.strip().split())
 i = 0
 for line in program:
-    if not (line[0] in instructions):
-        errors.append("Command Error, Line " + str(i) + ": '" + line[0] + "' is not a valid command")
+    if not (line.strip() in premade_instructions):  
+####### Casos con "Lit" #######
+        if not (line[0] in instructions):
+            errors.append("Command Error, Line " + str(i) + ": '" + line[0] + "' is not a valid command")
     i += 1
 
 for error in errors:
