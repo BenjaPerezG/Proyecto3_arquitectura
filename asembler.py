@@ -60,6 +60,9 @@ lit_instructions = {"MOV A,dir":"0000010",#lit
                     "MOV (dir),A":"0100111",#dir
                     "MOV (dir),B":"0101000",#dir
 
+                    "ADD A,dir":"0000110",#lit #nuevo
+                    "ADD B,dir":"0000111",#lit #nuevo
+
                     "ADD A,(dir)":"0101100",#dir
                     "ADD B,(dir)":"0101101",#dir
                     "ADD (dir)":"0101111",#dir
@@ -96,30 +99,32 @@ lit_instructions = {"MOV A,dir":"0000010",#lit
                     "XOR (dir)":"1000010",#dir primera pagina lista, segunda pagina lista hasta xor
 
                     ##falta arreglar los de aca a cambiarlos por dir y arreglar su opcode
-                    "SHL A,A":"0011100",
-                    "SHL A,B":"0011101",
-                    "SHL B,A":"0011110",
-                    "SHL B,B":"0011111",
-                    "SHR A,A":"0100000",
-                    "SHR A,B":"0100001",
-                    "SHR B,A":"0100010",
-                    "SHR B,B":"0100011",
-                    "INC B":"0100100",
-                    "MOV A,(B)":"0101001",
-                    "MOV B,(B)":"0101010",
-                    "MOV (B),A":"0101011",
-                    "ADD A,(B)":"0101110",
-                    "SUB A,(B)":"0110010",
-                    "AND A,(B)":"0110110",
-                    "OR A,(B)":"0111010",
-                    "NOT (B)":"0111110",
-                    "XOR A,(B)":"1000001",
-                    "SHL (B)":"1000101",
-                    "SHR (B)":"1001000",
-                    "INC (B)":"1001010",
-                    "RST (B)":"1001100",
-                    "CMP A,B":"1001101",
-                    "CMP A,(B)":"1010010"}
+                    "SHL (dir),A":"1000011",#dir
+                    "SHL (dir),B":"1000100",#dir
+                    
+                    "SHR (dir),A":"1000110",#dir
+                    "SHR (dir),B":"1000111",#dir
+                    
+                    "INC (dir)":"1001001",#dir
+                    
+                    "RST (dir)":"1001011",#dir
+                    
+                    "CMP A,dir":"1001110",#lit
+                    "CMP B,dir":"1001111",#lit
+                    
+                    "CMP A,(dir)":"1010000",#dir
+                    "CMP B,(dir)":"1010001",#dir
+
+                    ##SALTOS
+                    "JMP dir": "1010011",
+                    "JEQ dir": "1010100",
+                    "JNE dir": "1010101",
+                    "JGT dir": "1010110",
+                    "JLT dir": "1010111",
+                    "JGE dir": "1011000",
+                    "JLE dir": "1011001",
+                    "JCR dir": "1011010",
+                    "JOV dir": "1011011"}
 ##llamar a todos los casos de de dir o lit como dir
 errors = []
 asemb =  open("main.as")
