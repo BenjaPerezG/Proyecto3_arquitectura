@@ -6,7 +6,6 @@ This is a temporary script file.
 """
 
 
-
 instructions = ["MOV", "ADD", "SUB", "AND", "OR ", "NOT", "XOR", "SHL", "SHR", 
                "INC", "RST", "CMP", "JMP", "JEQ", "JNE", "JGT", "JLT", "JGE", 
                "JLE", "JCR", "JOV"]
@@ -128,9 +127,11 @@ lit_instructions = {"MOV A,dir":"0000010",#lit
 ##llamar a todos los casos de de dir o lit como dir
 errors = []
 asemb =  open("main.as")
-out = open("bin.out", "w")
+outf = open("bin.out", "w")
 numbers = "1234567890"
 program = []
+out = []
+
 
 for line in asemb:
     program.append(line.strip())
@@ -142,15 +143,29 @@ for line in program:
         for j in line: 
             if j in numbers:
                 numero += j
+        print("{0:08b}".format(int(numero)))
         variable = line.replace(numero, "dir")
         if not (variable in lit_instructions):
             errors.append("Command Error, Line " + str(i) + ": '" + variable + "' is not a valid command")
+        elif not (line[:3] in instructions):
+            errors.append("Command Error, Line " + str(i) + ": '" + line + "' is not a valid command")
+        else:
+            if(variable in lit_instructions):
+                out.append(lit_instructions[variable] + "{0:08b}".format(int(numero)))
+            
+            else:
+                out.append(premade_instructions[variable] + "00000000")
+            
+        
+        
             ####### Casos con "Lit" , solo sirve para reconocer casos, despues arreglamos para que lea bien el espacio #######
             ####### con una lista de todos los dir o lit que existan dentro de nuestro asemb
-        if not (line[:3] in instructions):
-            errors.append("Command Error, Line " + str(i) + ": '" + line + "' is not a valid command")
+        
     i += 1
-
 for error in errors:
     print(error)
+
+for c in out:
+    outf.write(c +"\n")
+
 
