@@ -146,7 +146,7 @@ for line in program:
         if not (variable in lit_instructions):
             errors.append("Command Error, Line " + str(i) + ": '" + variable + "' is not a valid command")
             ####### Casos con "Lit" , solo sirve para reconocer casos, despues arreglamos para que lea bien el espacio #######
-            ####### con una lista de todos los dir o lit que existan dentro de nuestro asemb
+            ####### con una lista de todos los dir o lit que existan dentro de nuestro asemb #######
         if not (line[:3] in instructions):
             errors.append("Command Error, Line " + str(i) + ": '" + line + "' is not a valid command")
     i += 1

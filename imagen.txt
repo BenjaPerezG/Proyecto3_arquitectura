@@ -1,0 +1,54 @@
+DATA:
+inicio
+filas
+cols
+i 0
+j 0
+largo
+rojos 0
+
+CODE:
+
+mult:
+MOV A,(filas)
+MOV B,A
+ADD A,B
+INC (i)
+CMP i,(cols)
+JGE save
+JMP mult
+
+save:
+MOV (largo),A
+JMP is_red
+
+is_red:
+MOV B,(inicio)
+MOV A,(B)
+INC (inicio)
+MOV B,(inicio)
+MOV B,(B)
+CMP A,B
+JLT green_greater
+INC (inicio)
+MOV B,(inicio)
+MOV B,(B)
+CMP A,B
+JGE blue_greater
+INC (rojos)
+JMP next
+
+blue_greater:
+JMP next
+
+green_greater:
+INC (inicio)
+JMP next
+
+next:
+INC (j)
+MOV B,(j)
+CMP B,(largo)
+JGE end
+INC (inicio)
+JMP is_red
