@@ -1,8 +1,65 @@
 DATA:
 inicio
 n
-inicio
 count0 0
 count1 0
+and 1
+i 0
+arr 48
 
 CODE:
+
+copy_arr:
+MOV A,(arr)
+PUSH A
+MOV A,(inicio)
+PUSH A
+MOV A,(and)
+MOV B,(inicio)
+MOV B,(B)
+AND (arr)
+INC (inicio)
+INC (arr)
+INC (i)
+MOV A,(n)
+CMP A,(i)
+JLE res
+JMP  copy_arr
+
+res:
+CALL reset
+JMP sort
+
+reset:
+RST i
+POP A
+MOV (inicio),A
+pop A
+MOV (arr),A
+PUSH A
+MOV A,(inicio)
+PUSH A
+RET
+
+sort:
+MOV B,(arr)
+MOV A,(B)
+CMP A,0
+JEQ addZ
+JNE addO
+
+comp:
+INC (i)
+INC (arr)
+MOV A,(n)
+CMP A,(i)
+JLE next
+JMP sort
+
+addZ:
+INC (count0)
+JMP comp
+
+addO:
+INC (count1)
+JMP comp
