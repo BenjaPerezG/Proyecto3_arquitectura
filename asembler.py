@@ -126,42 +126,75 @@ lit_instructions = {"MOV A,dir":"0000010",#lit
                     "JOV dir": "1011011"}
 ##llamar a todos los casos de de dir o lit como dir
 errors = []
-asemb =  open("main.as")
+asemb =  open("productoPunto.as")
 outf = open("bin.out", "w")
 numbers = "1234567890"
 program = []
 out = []
+data = []
 
 
 for line in asemb:
     program.append(line.strip())
 i = 0
+
+
+
+for line in program: 
+    if line != "":
+        line.strip().split(" ")
+        data.append(line)
+    else:
+        break
+data.pop(0)
+print(data)
+counter_mem = 0 
+dta ={}
+for i in data:
+    if " " in i:
+        i = i.split(" ")
+        dta[i[0]] = "{0:08b}".format(counter_mem)
+        counter_mem +=1
+    else:
+        dta[i] = "{0:08b}".format(counter_mem)
+        counter_mem +=1
+
+print(dta)
+
+
+
+boolito = 0
 for line in program:
-    if not (line in premade_instructions):  
-        variable = ""
-        numero = ""
-        for j in line: 
-            if j in numbers:
-                numero += j
-        print("{0:08b}".format(int(numero)))
-        variable = line.replace(numero, "dir")
-        if not (variable in lit_instructions):
-            errors.append("Command Error, Line " + str(i) + ": '" + variable + "' is not a valid command")
-        elif not (line[:3] in instructions):
-            errors.append("Command Error, Line " + str(i) + ": '" + line + "' is not a valid command")
-        else:
-            if(variable in lit_instructions):
-                out.append(lit_instructions[variable] + "{0:08b}".format(int(numero)))
-            
+    if line != "" and line[-1] != ":":
+        if line == "CODE:":
+            boolito = 1
+        if boolito == 0:
+            continue
+        if not (line in premade_instructions):  
+            variable = ""
+            numero = ""
+            for j in line: 
+                if j in numbers:
+                    numero += j
+            print("{0:08b}".format(int(numero)))
+            variable = line.replace(numero, "dir")
+            if not (variable in lit_instructions):
+                errors.append("Command Error, Line " + str(i) + ": '" + variable + "' is not a valid command")
+            elif not (line[:3] in instructions):
+                errors.append("Command Error, Line " + str(i) + ": '" + line + "' is not a valid command")
             else:
-                out.append(premade_instructions[variable] + "00000000")
+                if(variable in lit_instructions):
+                    out.append(lit_instructions[variable] + "{0:08b}".format(int(numero)))
+                
+                else:
+                    out.append(premade_instructions[variable] + "00000000")
+                
             
-        
         
             ####### Casos con "Lit" , solo sirve para reconocer casos, despues arreglamos para que lea bien el espacio #######
             ####### con una lista de todos los dir o lit que existan dentro de nuestro asemb
         
-    i += 1
+        i += 1
 for error in errors:
     print(error)
 
