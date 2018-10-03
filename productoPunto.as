@@ -28,7 +28,6 @@ MOV B,(j)
 CMP B,(i)
 JGT next
 POP B
-INC (i)
 JMP multiply
 
 next:
