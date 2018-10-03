@@ -4,6 +4,7 @@ inicio2
 n
 i 0
 j 0
+v 0
 pp 0
 
 CODE:
@@ -31,7 +32,7 @@ next:
 ADD A,(pp)
 MOV (pp),A
 RST (i)
-INC (j)
+INC (v)
 MOV B,(j)
 CMP B,(n)
 JGE end
