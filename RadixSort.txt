@@ -16,8 +16,8 @@ MOV A,(inicio)
 PUSH A
 MOV A,(and)
 MOV B,(inicio)
-MOV B,(B)
-AND (arr)
+MOV B,(B)*
+AND (arr)*
 INC (inicio)
 INC (arr)
 INC (i)
