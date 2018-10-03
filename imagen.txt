@@ -14,7 +14,8 @@ MOV A,(filas)
 MOV B,A
 ADD A,B
 INC (i)
-CMP i,(cols)
+MOV B,(i)
+CMP B,(cols)
 JGE save
 JMP mult
 

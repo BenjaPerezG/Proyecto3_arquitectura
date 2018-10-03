@@ -5,7 +5,8 @@ count0 0
 count1 0
 and 1
 i 0
-arr 48
+arr
+ord
 
 CODE:
 
@@ -41,7 +42,7 @@ MOV A,(inicio)
 PUSH A
 RET
 
-sort:
+sum:
 MOV B,(arr)
 MOV A,(B)
 CMP A,0
@@ -54,7 +55,7 @@ INC (arr)
 MOV A,(n)
 CMP A,(i)
 JLE next
-JMP sort
+JMP sum
 
 addZ:
 INC (count0)
@@ -63,3 +64,57 @@ JMP comp
 addO:
 INC (count1)
 JMP comp
+
+next:
+CALL reset
+MOV B,(arr)
+MOV A,(B)
+JEQ zero
+JMP one
+
+one:
+MOV A,(ord)
+PUSH A
+MOV B,(count1)
+MOV A,(count1)
+SUB A,1
+MOV (count0),A
+POP A
+JMP ciclo
+
+zero:
+MOV A,(ord)
+PUSH A
+MOV B,(count0)
+MOV A,(count0)
+SUB A,1
+MOV (count0),A
+POP A
+JMP ciclo
+
+ciclo:
+CMP B,A
+JLE insert
+INC A
+JMP ciclo
+
+insert:
+MOV B,(inicio)
+MOV B,(B)
+PUSH B
+MOV B,A
+POP A
+MOV (B),A
+INC (inicio)
+INC (i)
+MOV B,(i)
+CMP B,(n)
+JGE next_insert
+
+next_insert:
+SHL (and)
+RST (count0)
+RST (count1)
+MOV A,(and)
+JEQ end
+JMP sum
