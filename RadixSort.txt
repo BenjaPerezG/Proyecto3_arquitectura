@@ -141,7 +141,8 @@ MOV (inicio),B
 JMP replace_origin
 
 next_insert:
-SHL (and)
+MOV A,(and)
+SHL (and),A
 RST (count0)
 RST (count1)
 MOV A,(and)
