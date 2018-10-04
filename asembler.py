@@ -8,7 +8,7 @@ This is a temporary script file.
 
 instructions = ["MOV", "ADD", "SUB", "AND", "OR ", "NOT", "XOR", "SHL", "SHR", 
                "INC", "RST", "CMP", "JMP", "JEQ", "JNE", "JGT", "JLT", "JGE", 
-               "JLE", "JCR", "JOV","POP","PUSH"]
+               "JLE", "JCR", "JOV","POP","PUSH", "RET", "CAL"]
 
 premade_instructions = {"MOV A,B":"0000000",
                         "MOV B,A":"0000001",
@@ -128,7 +128,10 @@ lit_instructions = {"MOV A,dir":"0000010",#lit
                     "JGE dir": "1011000",
                     "JLE dir": "1011001",
                     "JCR dir": "1011010",
-                    "JOV dir": "1011011"}
+                    "JOV dir": "1011011",
+                    "CALL dir" : "1010011",
+                    "RET" : "1010011"
+                    }
 ##llamar a todos los casos de de dir o lit como dir
 errors = []
 asemb =  open("RadixSort.txt")
@@ -137,6 +140,7 @@ numbers = "1234567890"
 program = []
 out = []
 data = []
+lista_call = []
 counter_stack = 255
 
 for line in asemb:
@@ -233,13 +237,24 @@ for line in program:
 
     if line != "" and line[-1] != ":":
         if not (line in premade_instructions): 
+
             variable = ""
             numero = ""
+            if "RET" in line:
+                variable = line
+                numero = lista_call[-1]
+                lista_call.pop(-1)
             for s in saltoss:
                 if s in line:
-                    numero = saltoss[s]
-                    variable1 = line.replace(s, "dir")
-                    break
+                    if "CALL" in line:
+                        numero = saltoss[s]
+                        variable1 = line.replace(s, "dir")
+                        lista_call.append(i)
+                        break
+                    else:
+                        numero = saltoss[s]
+                        variable1 = line.replace(s, "dir")
+                        break
             if numero == "":
                 for dt in dta:    
                     if dt in line:
@@ -257,6 +272,7 @@ for line in program:
             if not (variable1 in lit_instructions):
                 errors.append("Command Error, Line " + str(i) + ": '" + variable1 + "' is not a valid command")
             elif not (line[:3] in instructions):
+                print(variable1)
                 errors.append("Command Error, Line " + str(i) + ": '" + line + "' is not a valid command")
             else:
                 if (variable1 in lit_instructions):
