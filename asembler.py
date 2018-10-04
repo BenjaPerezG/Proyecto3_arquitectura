@@ -8,7 +8,7 @@ This is a temporary script file.
 
 instructions = ["MOV", "ADD", "SUB", "AND", "OR ", "NOT", "XOR", "SHL", "SHR", 
                "INC", "RST", "CMP", "JMP", "JEQ", "JNE", "JGT", "JLT", "JGE", 
-               "JLE", "JCR", "JOV"]
+               "JLE", "JCR", "JOV","POP","PUSH"]
 
 premade_instructions = {"MOV A,B":"0000000",
                         "MOV B,A":"0000001",
@@ -50,6 +50,10 @@ premade_instructions = {"MOV A,B":"0000000",
                         "RST (B)":"1001100",
                         "CMP A,B":"1001101",
                         "CMP A,(B)":"1010010",
+                        "PUSH A": "0000010",
+                        "PUSH B": "0000011",
+                        "POP A" : "0100111",
+                        "POP B" : "0101000",
                             }
 
 lit_instructions = {"MOV A,dir":"0000010",#lit
@@ -127,13 +131,13 @@ lit_instructions = {"MOV A,dir":"0000010",#lit
                     "JOV dir": "1011011"}
 ##llamar a todos los casos de de dir o lit como dir
 errors = []
-asemb =  open("productoPunto.txt")
+asemb =  open("RadixSort.txt")
 outf = open("bin.out", "w")
 numbers = "1234567890"
 program = []
 out = []
 data = []
-
+counter_stack = 255
 
 for line in asemb:
     program.append(line.strip())
@@ -148,6 +152,7 @@ for line in program:
     else:
         break
 saltos = {}
+
 
 data.pop(0)
 largos = []
@@ -177,22 +182,47 @@ for k in dataa:
         counter_mem +=1
 
 
+
 booolito = 0
 contador = 0
+salto = []
 for  line in program:
     if line == "CODE:":
         booolito = 1
         continue
     if booolito == 0:
-        contador +=1
         continue
     if line != "":
         if line[-1] == ":":
             linea = line.replace(":", "")
             saltos[linea] = str(contador) 
+
+            salto.append(linea)
         contador += 1
 
 
+largos = []
+for l in salto:
+    largos.append(len(l))
+largos.sort()
+largos.reverse()
+saltoo =[]
+c1 = 0
+while c1 < len(largos) -1:
+    for la in range(len(salto)):
+        if largos[c1] == len(salto[la]):
+            saltoo.append(salto[la])
+            if c1 == len(largos) -1:
+                break
+            c1 +=1
+
+saltoss= { }
+for e in saltoo:
+    saltoss[e] = saltos[e] 
+
+
+
+outt = []
 boolito = 0
 for line in program:
     i = i + 1
@@ -205,12 +235,10 @@ for line in program:
         if not (line in premade_instructions): 
             variable = ""
             numero = ""
-            for s in saltos:
-                ##manejar los saltos qlqqlqlqlqlq
+            for s in saltoss:
                 if s in line:
-                    numero = saltos[s]
+                    numero = saltoss[s]
                     variable1 = line.replace(s, "dir")
-                    print(variable1)
                     break
             if numero == "":
                 for dt in dta:    
@@ -218,35 +246,43 @@ for line in program:
                         numero = dta[dt]
                         variable1 = line.replace(dt, "dir")
                         break
-                    else:
+            if numero == "":
                         for j in line: 
-                                if j in numbers:
-                                    numero += j
+                            if j in numbers:
+                                numero += j
                         if numero != "":
-                            variable1 = line.replace(numero, "dir")
-                            break
+                                variable1 = line.replace(numero, "dir")
+                                
               
             if not (variable1 in lit_instructions):
                 errors.append("Command Error, Line " + str(i) + ": '" + variable1 + "' is not a valid command")
             elif not (line[:3] in instructions):
                 errors.append("Command Error, Line " + str(i) + ": '" + line + "' is not a valid command")
             else:
-                if(variable1 in lit_instructions):
+                if (variable1 in lit_instructions):
                     if numero != "":
-                        out.append(lit_instructions[variable1] + "{0:08b}".format(int(numero)))
+                        out.append(lit_instructions[variable1] +"_" + "{0:08b}".format(int(numero)))
+                        outt.append(variable1)
                     else:
                         numero = 0
-                        out.append(lit_instructions[variable1] + "{0:08b}".format(int(numero)))
-
-                
-                else:
-                    out.append(premade_instructions[variable1] + "00000000")
+                        out.append(lit_instructions[variable1] +"_" + "{0:08b}".format(int(numero)))
+                        outt.append(variable1)
+        else:
+            if "PUSH" in line:
+                out.append(premade_instructions[line] +"_" + "{0:08b}".format(int(counter_stack)))
+                outt.append(line)
+                counter_stack -=1
+            elif "POP" in line:
+                out.append(premade_instructions[line] +"_" + "{0:08b}".format(int(counter_stack)))
+                counter_stack +=1
+                outt.append(line)
+            else:
+                out.append(premade_instructions[line] + "_" + "00000000")
+                outt.append(line)
                 
             
         
-            ####### Casos con "Lit" , solo sirve para reconocer casos, despues arreglamos para que lea bien el espacio #######
-            ####### con una lista de todos los dir o lit que existan dentro de nuestro asemb  
-    
+
 for error in errors:
     print(error)
 

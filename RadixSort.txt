@@ -25,17 +25,17 @@ INC (i)
 MOV A,(n)
 CMP A,(i)
 JLE res
-JMP  copy_arr
+JMP copy_arr
 
 res:
 CALL reset
 JMP sort
 
 reset:
-RST i
+RST (i)
 POP A
 MOV (inicio),A
-pop A
+POP A
 MOV (arr),A
 PUSH A
 MOV A,(inicio)

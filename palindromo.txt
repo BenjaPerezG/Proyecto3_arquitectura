@@ -35,3 +35,6 @@ JMP asignar
 fin:
 INC (res)
 JMP end
+
+end:
+MOV A,(res)
