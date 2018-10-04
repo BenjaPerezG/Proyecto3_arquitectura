@@ -12,10 +12,13 @@ CODE:
 assign:
 MOV B,(inicio1)
 MOV A,(B)
+JEQ next
 MOV B,(inicio2)
 MOV B,(B)
+JEQ next
 MOV (j),B
-MOV A,B
+MOV B,A
+
 
 multiply:
 ADD A,B
@@ -25,7 +28,6 @@ MOV B,(j)
 CMP B,(i)
 JGT next
 POP B
-INC (i)
 JMP multiply
 
 next:
@@ -33,7 +35,7 @@ ADD A,(pp)
 MOV (pp),A
 RST (i)
 INC (v)
-MOV B,(j)
+MOV B,(v)
 CMP B,(n)
 JGE end
 INC (inicio1)
