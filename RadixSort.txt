@@ -67,6 +67,8 @@ JMP comp
 
 next:
 CALL reset
+
+do:
 MOV B,(arr)
 MOV A,(B)
 JEQ zero
@@ -109,7 +111,34 @@ INC (inicio)
 INC (i)
 MOV B,(i)
 CMP B,(n)
+JGE reset_inicio
+JMP do
+
+reset_inicio:
+POP B		#B = inicio original
+MOV (inicio),B
+PUSH B
+MOV B,(ord)
+PUSH B
+RST (i)
+
+replace_origin:
+MOV B,(ord)
+MOV A,(B)
+MOV B,(inicio)
+MOV (B),A
+INC (ord)
+INC B
+PUSH B
+MOV B,(ord)
+MOV A,(B)
+INC (i)
+MOV B,(i)
+CMP B,(n)
 JGE next_insert
+POP B
+MOV (inicio),B
+JMP replace_origin
 
 next_insert:
 SHL (and)
